@@ -18,13 +18,27 @@ erweist, ist eine Migration der produktiven Anwendung geplant.
 
 Für Stackit soll eine Terraformkonfiguration erstellt werden.
 
+### Ziel des PoC
+
+Im Gegensatz zur Migrationsanalyse, die auch mehr als Kostenanalyse durchgeführt
+wurde, soll es beim PoC darum gehen so schnell wie möglich eine qualitativ
+identische Umgebung bei Stackit aufzusetzen, damit man beurteilen ob es an einer
+Stelle gravierende Probleme gibt.
+
+Qualitativ identisch heißt, dass man halt alle Aspekte mal testen kann.
+
+Quantitativ muss man sich noch nicht an der Quellumgebung bei Hetzner
+orientieren. Für den PoC kann man zunächst nur den demo oder test namespace
+aufsetzen.
+
 ### Dokumente
 
 | Dateiname                                                         | Beschreibung                          |
 | ----------------------------------------------------------------- | ------------------------------------- |
 | `docs/current-architecture.md`                                    | Abgeleitete Ist-Architektur           |
 | `docs/customize-stackit-migration.md`                             | Projektbeschreibung                   |
-| `resources/Customice-Migrationsanalyse.pdf`                       | Migrationsanalyse                     |
+| `docs/terraform-clarification-questions.md`                       | Klärungsfragen für Terraform          |
+| `resources/Customice-Migrationsanalyse.pdf`                       | Migrationsanalyse, grobe Kosten       |
 | `resources/SOW_STACKIT-Funding_V2.pdf`                            | Funding Dokument                      |
 | `resources/current-system/customice-files-and-backups.drawio.png` | Backuplocations                       |
 | `resources/current-system/customice-overview.drawio.pdf`          | Architekturdiagramm                   |
