@@ -13,17 +13,19 @@ späteren Zielbild jedoch nicht entgegenstehen.
 
 ## 1. Umfang des PoC
 
-- Soll zunächst die Umgebung `test` oder `demo` migriert werden?
-- Soll der PoC in einem eigenen Kubernetes-Cluster laufen?
+- Soll zunächst die Umgebung `test` oder `demo` migriert werden? test
+- Soll der PoC in einem eigenen Kubernetes-Cluster laufen? egal
 - Ist später ein gemeinsamer Cluster für TEST, DEMO und PROD oder ein eigener
-  PROD-Cluster vorgesehen?
+  PROD-Cluster vorgesehen? ja
 - Welche bestehenden externen Dienste werden im PoC zunächst weiterverwendet?
-  - MySQL bei Hetzner
-  - Cloudflare R2
-  - PDF-Server
-  - Mailserver
-  - Strato HiDrive
+  - MySQL bei Hetzner, auf MariaDB testen
+  - Cloudflare R2, nein
+  - PDF-Server, ja ist erreichbar
+  - Mailserver, ja
+  - Strato HiDrive, ja für Testbackup
 - Welche Dienste sollen bereits im PoC durch STACKIT-Dienste ersetzt werden?
+  - Datenbank
+  - S3 Storage
 
 Diese Entscheidung bestimmt den Terraform-Umfang stärker als die Anzahl der im
 PoC betriebenen Anwendungen.
@@ -36,7 +38,7 @@ PoC betriebenen Anwendungen.
   öffentliche IP-Adressen vorhanden?
 - Wie authentifiziert sich Terraform?
   - persönlicher Account für den PoC
-  - Service Account für CI/CD
+  - Service Account für CI/CD, github
 - Wer darf Infrastruktur erstellen, ändern und löschen?
 - Gibt es Vorgaben für Namen, Tags und Kostenstellen?
 
@@ -46,7 +48,7 @@ PoC betriebenen Anwendungen.
 - Wo wird der Terraform-State gespeichert?
 - Wie werden State Locking und Verschlüsselung umgesetzt?
 - Von wo werden `terraform plan` und `terraform apply` ausgeführt?
-  - lokale Administration
+  - lokale Administration, ja das
   - GitLab- oder GitHub-CI
   - anderer Runner
 - Wer prüft und genehmigt ein `apply`?
@@ -56,42 +58,42 @@ PoC betriebenen Anwendungen.
   - getrennte Verzeichnisse
   - getrennte STACKIT-Projekte
 - Welche Ressourcen benötigen einen Löschschutz, insbesondere Datenbanken und
-  persistente Speicher?
+  persistente Speicher? auf jeden Fall
 - Welche Terraform-Ausgaben benötigt der nachfolgende Argo-CD-Bootstrap?
 
 ## 4. SKE-Cluster
 
-- Welche Kubernetes-Version soll eingesetzt werden?
-- Soll die Kubernetes-API öffentlich oder nur privat erreichbar sein?
+- Welche Kubernetes-Version soll eingesetzt werden? neueste
+- Soll die Kubernetes-API öffentlich oder nur privat erreichbar sein? nur privat
 - Welche Node-Pools werden benötigt?
 - Welche VM-Größen und wie viele Nodes sind für den PoC vorgesehen?
-- Wird Cluster Autoscaling benötigt?
-- Müssen Nodes über mehrere Availability Zones verteilt werden?
+  Migrationsanalyse
+- Wird Cluster Autoscaling benötigt? nein
+- Müssen Nodes über mehrere Availability Zones verteilt werden? nein
 - Welche Anforderungen gibt es an:
   - Labels und Taints
   - Wartungsfenster
   - automatische Kubernetes-Upgrades
-  - CPU-Architektur
-  - maximale Pod-Anzahl pro Node?
-- Welche CPU- und RAM-Requests benötigen die Anwendungen tatsächlich?
+  - CPU-Architektur, Marc fragen
+- Welche CPU- und RAM-Requests benötigen die Anwendungen tatsächlich? Jan
+  schickt Report
 
 Insbesondere das erforderliche Sizing ist aus den vorhandenen Deployment-Dateien
 noch nicht ausreichend ableitbar.
 
 ## 5. Netzwerk
 
-- Welche CIDRs werden für Nodes, Pods und Services verwendet?
-- Überschneiden sich diese mit Hetzner-Netzen, Firmen-VPNs, Kundennetzen oder
-  zukünftigen STACKIT-Netzen?
-- Benötigen die Workloads eine feste ausgehende IP-Adresse?
-- Gibt es IP-Allowlisting bei PMS-Systemen, PDF-, Mail- oder Datenbankservern?
+- Welche CIDRs werden für Nodes, Pods und Services verwendet? keine Vorgaben
+- Benötigen die Workloads eine feste ausgehende IP-Adresse? Cloudflare braucht
+  fixe IPs
+- Gibt es IP-Allowlisting bei PMS-Systemen (nein), PDF- (nein), Mail- (Marc) ?
 - Wie erreicht der Cluster die zunächst bei Hetzner verbleibenden Dienste?
-  - über öffentliche Endpunkte
+  - über öffentliche Endpunkte, Mail?, PDF
   - über ein VPN
   - über eine Site-to-Site-Verbindung
-- Ist privates Networking zur Datenbank erforderlich?
-- Welche eingehenden Ports werden benötigt?
-- Soll der Ingress ausschließlich über Cloudflare erreichbar sein?
+- Ist privates Networking zur Datenbank erforderlich? ja Tunnel
+- Welche eingehenden Ports werden benötigt? nein
+- Soll der Ingress ausschließlich über Cloudflare erreichbar sein? ja
 - Müssen interne Admin-Endpunkte oder Argo CD separat erreichbar sein?
 
 Eine feste Egress-IP könnte insbesondere wegen externer PMS-Systeme ein
