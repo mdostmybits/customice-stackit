@@ -9,9 +9,9 @@ Größen im Diagramm beziehen sich auf Produktion.
 
 ```mermaid
 flowchart LR
-    users["Hotelkunden, Hotelmitarbeiter<br/>und Displays"]
-    pms["PMS / Drittsysteme<br/>apaleo, MEWS, Siemens SIHOT/SCD"]
-    git["GitOps-Repository<br/>Base + Overlays"]
+    users["Hotelkunden<br/>Hotelmitarbeiter<br/>Displays"]
+    pms["PMS / Drittsysteme<br/>apaleo<br/>MEWS<br/>Siemens SIHOT/SCD"]
+    git["GitOps-Repository<br/>Base<br/>Overlays"]
 
     subgraph edge["Internet / Edge"]
         cf["Cloudflare<br/>DNS / Reverse Proxy"]
@@ -20,33 +20,33 @@ flowchart LR
     subgraph hetzner["Hetzner"]
         subgraph k8s["Self-hosted Kubernetes-Cluster"]
             argo["Argo CD"]
-            istio["Istio Gateways / VirtualServices<br/>TLS-Zertifikate via cert-manager"]
+            istio["Istio Gateways<br/>VirtualServices<br/>TLS-Zertifikate via cert-manager"]
 
             subgraph namespaces["Getrennte Namespaces: TEST | DEMO | PROD"]
-                web["Web-UIs<br/>Frontend/Admin (2) · Configurator (2)<br/>Reports (1) · Screens (2) · Pickup (1)<br/>Portal (1) · Frontend v2 (1) · Configurator v2 (1)"]
-                api1["Legacy Backend<br/>1 Job-Instanz + 2 API-Replikate"]
+                web["Web-UIs<br/>Frontend/Admin (2)<br/>Configurator (2)<br/>Reports (1)<br/>Screens (2)<br/>Pickup (1)<br/>Portal (1)<br/>Frontend v2 (1)<br/>Configurator v2 (1)"]
+                api1["Legacy Backend<br/>1 Job-Instanz<br/>2 API-Replikate"]
                 api2["Spring Backend v2<br/>2 Replikate"]
                 reports["Reports Backend<br/>1 Replikat"]
                 webhook["Webhook Receiver<br/>3 Replikate"]
-                rabbit["RabbitMQ-Cluster<br/>3 Replikate · AMQP 5672"]
-                pvc[("Longhorn RWX PVC<br/>customice-pvc · PROD 200 GiB")]
-                backup["Kubernetes Backup-CronJobs<br/>Dateien und S3"]
-                ops["Manuell verwaltete Plattformdienste<br/>Monitoring, Logging, Sealed Secrets<br/>(Secret-Nutzung nicht durchgängig)"]
+                rabbit["RabbitMQ-Cluster<br/>3 Replikate<br/>AMQP 5672"]
+                pvc[("Longhorn RWX PVC<br/>customice-pvc<br/>PROD 200 GiB")]
+                backup["Kubernetes<br/>Backup-CronJobs<br/>Dateien und S3"]
+                ops["Manuell verwaltete<br/>Plattformdienste<br/>Monitoring<br/>Logging<br/>Sealed Secrets<br/>(Secret-Nutzung nicht durchgängig)"]
             end
         end
 
-        db[("MySQL auf separater DB-VM<br/>Datenbanken für TEST / DEMO / PROD")]
-        pdf["Externer Windows-PDF-Server<br/>DOCX → PDF"]
+        db[("MySQL auf separater DB-VM<br/>Datenbanken für TEST<br/>DEMO und PROD")]
+        pdf["Externer<br/>Windows-PDF-Server<br/>DOCX → PDF"]
         mail["Externer Mailserver"]
-        dbbackup["Backup-CronJob auf DB-VM"]
+        dbbackup["Backup-CronJob<br/>auf DB-VM"]
     end
 
     subgraph cloudflare["Cloudflare"]
-        r2[("R2 Buckets<br/>TEST / DEMO / PROD<br/>SSE-C verschlüsselt")]
+        r2[("R2 Buckets<br/>TEST<br/>DEMO<br/>PROD<br/>SSE-C verschlüsselt")]
     end
 
     subgraph strato["Strato HiDrive"]
-        sftp[("SFTP<br/>verschlüsselte Datei-, S3-<br/>und DB-Backups")]
+        sftp[("SFTP<br/>verschlüsselte Datei-Backups<br/>S3-Backups<br/>DB-Backups")]
         s3backup[("S3 Bucket<br/>Longhorn-Backups")]
     end
 
